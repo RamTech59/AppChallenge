@@ -2,27 +2,56 @@ package com.wingsoverglades.mapapppractice.app
 
 import android.support.v4.app.FragmentActivity
 import android.os.Bundle
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapsActivity : FragmentActivity()
-{
-	
+class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+
 	private var mMap: GoogleMap? = null // Might be null if Google Play services APK is not available.
-	
-	override fun onCreate(savedInstanceState: Bundle?)
-	{
+	private var mGoogleApiClient: GoogleApiClient? = null
+	var lat = 0.0
+	var lng = 0.0
+
+	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_maps)
 		setUpMapIfNeeded()
+		setupLocationApi()
 	}
-	
+
+	override fun onConnectionFailed(p0: ConnectionResult?) {
+		throw UnsupportedOperationException()
+	}
+	override fun onConnectionSuspended(p0: Int) {
+		throw UnsupportedOperationException()
+	}
+
+	protected fun setupLocationApi()
+	{
+	mGoogleApiClient = GoogleApiClient.Builder(this)
+			.addConnectionCallbacks(this as GoogleApiClient.ConnectionCallbacks)
+			.addOnConnectionFailedListener(this as GoogleApiClient.OnConnectionFailedListener)
+			.addApi(LocationServices.API)
+			.build()
+	}
+
+	public override fun onConnected(connectionHint: Bundle) {
+		var mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+		if (mLastLocation != null) {
+			lat = mLastLocation.getLatitude()
+			lng = mLastLocation.getLongitude()
+		}
+	}
 	override fun onResume()
 	{
 		super.onResume()
 		setUpMapIfNeeded()
+		mGoogleApiClient?.connect()
 	}
 	/**
 	 * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
@@ -65,7 +94,6 @@ class MapsActivity : FragmentActivity()
 	 */
 	private fun setUpMap()
 	{
-		mMap!!.addMarker(MarkerOptions().position(LatLng(0.0,0.0)).title(""))
-		mMap!!.addMarker(MarkerOptions().position(LatLng(0.0,0.0)).title(""))
+		mMap!!.addMarker(MarkerOptions().position(LatLng(lat,lng)).title(""))
 	}
 }
