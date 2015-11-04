@@ -2,6 +2,7 @@ package com.wingsoverglades.mapapppractice.app
 
 import android.support.v4.app.FragmentActivity
 import android.os.Bundle
+import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
@@ -24,11 +25,9 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 		setupLocationApi()
 	}
 
-	override fun onConnectionFailed(p0: ConnectionResult?) {
-		throw UnsupportedOperationException()
+	override fun onConnectionFailed(connectionResult: ConnectionResult) {
 	}
-	override fun onConnectionSuspended(p0: Int) {
-		throw UnsupportedOperationException()
+	override fun onConnectionSuspended(int: Int) {
 	}
 
 	protected fun setupLocationApi()
@@ -41,17 +40,21 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	}
 
 	public override fun onConnected(connectionHint: Bundle) {
-		var mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-		if (mLastLocation != null) {
-			lat = mLastLocation.getLatitude()
-			lng = mLastLocation.getLongitude()
+		var mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+			lat = mLastLocation.latitude
+			lng = mLastLocation.longitude
+	}
+	protected override fun onPause()
+	{
+		super.onPause()
+		if (mGoogleApiClient!!.isConnected) {
+			mGoogleApiClient?.disconnect()
 		}
 	}
 	override fun onResume()
 	{
 		super.onResume()
 		setUpMapIfNeeded()
-		mGoogleApiClient?.connect()
 	}
 	/**
 	 * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
