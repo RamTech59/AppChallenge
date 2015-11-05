@@ -2,7 +2,6 @@ package com.wingsoverglades.mapapppractice.app
 
 import android.support.v4.app.FragmentActivity
 import android.os.Bundle
-import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
@@ -15,14 +14,14 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 
 	private var mMap: GoogleMap? = null // Might be null if Google Play services APK is not available.
 	private var mGoogleApiClient: GoogleApiClient? = null
-	var lat = 0.0
-	var lng = 0.0
+	public var lat: Double = 0.0
+	public var lng: Double = 0.0
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_maps)
-		setUpMapIfNeeded()
 		setupLocationApi()
+		setUpMapIfNeeded()
 	}
 
 	override fun onConnectionFailed(connectionResult: ConnectionResult) {
@@ -39,11 +38,12 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 			.build()
 	}
 
-	public override fun onConnected(connectionHint: Bundle) {
+	public override fun onConnected(connectionHint: Bundle?) {
 		var mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-			lat = mLastLocation.latitude
-			lng = mLastLocation.longitude
-	}
+		lat = mLastLocation.latitude
+		lng = mLastLocation.longitude
+		mMap!!.addMarker(MarkerOptions().position(LatLng(lat,lng)).title(""))
+}
 	protected override fun onPause()
 	{
 		super.onPause()
@@ -55,6 +55,12 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	{
 		super.onResume()
 		setUpMapIfNeeded()
+	}
+	override fun onStart() {
+		super.onStart()
+		if (mGoogleApiClient != null) {
+			mGoogleApiClient!!.connect()
+		}
 	}
 	/**
 	 * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
@@ -97,6 +103,5 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	 */
 	private fun setUpMap()
 	{
-		mMap!!.addMarker(MarkerOptions().position(LatLng(lat,lng)).title(""))
 	}
 }
