@@ -1,5 +1,10 @@
 package com.wingsoverglades.mapapppractice.app
 
+
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.graphics.Color
 import android.support.v4.app.FragmentActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -29,7 +34,6 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	}
 	override fun onConnectionSuspended(int: Int) {
 	}
-
 	protected fun setupLocationApi()
 	{
 	mGoogleApiClient = GoogleApiClient.Builder(this)
@@ -43,15 +47,15 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 		var mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
 		lat = mLastLocation.latitude
 		lng = mLastLocation.longitude
+		mMap!!.clear()
+		mMap!!.isMyLocationEnabled = true
 		var camPos = CameraPosition.Builder()
 				.target(LatLng(lat,lng))
 				.zoom(17f)
 				.build()
 		mMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(camPos))
-		mMap!!.addMarker(MarkerOptions().position(LatLng(lat,lng)).title("Me"))
-				.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 		Toast.makeText(applicationContext, "This is your phone's last known location", Toast.LENGTH_LONG).show()
-}
+}		
 	protected override fun onPause()
 	{
 		super.onPause()
@@ -113,5 +117,5 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	{
 		mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
 		mMap!!.uiSettings.isZoomControlsEnabled = true
-}
+	}
 }
