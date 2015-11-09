@@ -1,10 +1,5 @@
 package com.wingsoverglades.mapapppractice.app
 
-
-import android.app.Activity
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.graphics.Color
 import android.support.v4.app.FragmentActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,46 +11,44 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 
-class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
-
+class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
+{
 	private var mMap: GoogleMap? = null // Might be null if Google Play services APK is not available.
 	private var mGoogleApiClient: GoogleApiClient? = null
 	public var lat: Double = 0.0
 	public var lng: Double = 0.0
 
-	override fun onCreate(savedInstanceState: Bundle?) {
+	override fun onCreate(savedInstanceState: Bundle?)
+	{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_maps)
 		setupLocationApi()
 		setUpMapIfNeeded()
 	}
-
 	override fun onConnectionFailed(connectionResult: ConnectionResult) {
 	}
 	override fun onConnectionSuspended(int: Int) {
 	}
 	protected fun setupLocationApi()
 	{
-	mGoogleApiClient = GoogleApiClient.Builder(this)
+		mGoogleApiClient = GoogleApiClient.Builder(this)
 			.addConnectionCallbacks(this as GoogleApiClient.ConnectionCallbacks)
 			.addOnConnectionFailedListener(this as GoogleApiClient.OnConnectionFailedListener)
 			.addApi(LocationServices.API)
 			.build()
 	}
 
-	public override fun onConnected(connectionHint: Bundle?) {
+	public override fun onConnected(connectionHint: Bundle?)
+	{
 		var mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+
 		lat = mLastLocation.latitude
 		lng = mLastLocation.longitude
 		mMap!!.clear()
 		mMap!!.isMyLocationEnabled = true
-		var camPos = CameraPosition.Builder()
-				.target(LatLng(lat,lng))
-				.zoom(17f)
-				.build()
-		mMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(camPos))
 		Toast.makeText(applicationContext, "This is your phone's last known location", Toast.LENGTH_LONG).show()
-}		
+}
+
 	protected override fun onPause()
 	{
 		super.onPause()
@@ -63,17 +56,21 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 			mGoogleApiClient?.disconnect()
 		}
 	}
+
 	override fun onResume()
 	{
 		super.onResume()
 		setUpMapIfNeeded()
 	}
-	override fun onStart() {
+
+	override fun onStart()
+	{
 		super.onStart()
 		if (mGoogleApiClient != null) {
 			mGoogleApiClient!!.connect()
 		}
 	}
+
 	/**
 	 * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
 	 * installed) and the map has not already been instantiated.. This will ensure that we only ever
@@ -94,13 +91,11 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	private fun setUpMapIfNeeded()
 	{
 		// Do a null check to confirm that we have not already instantiated the map.
-		if (mMap == null)
-		{
+		if (mMap == null) {
 			// Try to obtain the map from the SupportMapFragment.
 			mMap = (supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).map
 			// Check if we were successful in obtaining the map.
-			if (mMap != null)
-			{
+			if (mMap != null) {
 				setUpMap()
 			}
 		}
