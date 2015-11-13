@@ -1,4 +1,4 @@
-package com.wingsoverglades.mapapppractice.app;
+package com.RamtechTSA.mapapppractice.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
