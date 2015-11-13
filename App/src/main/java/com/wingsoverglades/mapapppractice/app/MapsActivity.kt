@@ -45,6 +45,11 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 		lat = mLastLocation.latitude
 		lng = mLastLocation.longitude
 		mMap!!.clear()
+		var campos = CameraPosition.builder()
+				.target(LatLng(lat, lng))
+				.zoom(17f)
+				.build()
+		mMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(campos))
 		mMap!!.isMyLocationEnabled = true
 		Toast.makeText(applicationContext, "This is your phone's last known location", Toast.LENGTH_LONG).show()
 }
