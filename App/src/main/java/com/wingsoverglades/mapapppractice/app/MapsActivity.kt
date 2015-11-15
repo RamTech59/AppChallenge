@@ -2,6 +2,7 @@ package com.wingsoverglades.mapapppractice.app
 
 import android.support.v4.app.FragmentActivity
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -17,6 +18,7 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	private var mGoogleApiClient: GoogleApiClient? = null
 	public var lat: Double = 0.0
 	public var lng: Double = 0.0
+	public var dialog: Dialog? = null
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -52,8 +54,7 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 		mMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(campos))
 		mMap!!.isMyLocationEnabled = true
 		Toast.makeText(applicationContext, "This is your phone's last known location", Toast.LENGTH_LONG).show()
-}
-
+	}
 	protected override fun onPause()
 	{
 		super.onPause()
@@ -116,6 +117,7 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	private fun setUpMap()
 	{
 		mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
+		dialog = Dialog()
 		mMap!!.uiSettings.isZoomControlsEnabled = true
 	}
 }
