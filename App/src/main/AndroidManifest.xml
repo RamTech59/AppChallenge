@@ -40,8 +40,6 @@
                 <category android:name="android.intent.category.APP_MAPS" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity" >
-        </activity>
     </application>
 
 </manifest>
