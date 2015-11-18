@@ -2,15 +2,17 @@ package com.wingsoverglades.mapapppractice.app
 
 import android.support.v4.app.FragmentActivity
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.plus.Plus
 
 class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
@@ -18,41 +20,38 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	private var mGoogleApiClient: GoogleApiClient? = null
 	public var lat: Double = 0.0
 	public var lng: Double = 0.0
-	public var dialog: Dialog? = null
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_maps)
-		setupLocationApi()
+		setupApis()
 		setUpMapIfNeeded()
 	}
 	override fun onConnectionFailed(connectionResult: ConnectionResult) {
 	}
 	override fun onConnectionSuspended(int: Int) {
 	}
-	protected fun setupLocationApi()
+	protected fun setupApis()
 	{
 		mGoogleApiClient = GoogleApiClient.Builder(this)
-			.addConnectionCallbacks(this as GoogleApiClient.ConnectionCallbacks)
-			.addOnConnectionFailedListener(this as GoogleApiClient.OnConnectionFailedListener)
-			.addApi(LocationServices.API)
-			.build()
+				.addConnectionCallbacks(this as GoogleApiClient.ConnectionCallbacks)
+				.addOnConnectionFailedListener(this as GoogleApiClient.OnConnectionFailedListener)
+				.addApi(Plus.API).addApi(LocationServices.API).build()
 	}
 
 	public override fun onConnected(connectionHint: Bundle?)
 	{
 		var mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-
 		lat = mLastLocation.latitude
 		lng = mLastLocation.longitude
 		mMap!!.clear()
+		mMap!!.isMyLocationEnabled = true
 		var campos = CameraPosition.builder()
 				.target(LatLng(lat, lng))
 				.zoom(17f)
 				.build()
 		mMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(campos))
-		mMap!!.isMyLocationEnabled = true
 		Toast.makeText(applicationContext, "This is your phone's last known location", Toast.LENGTH_LONG).show()
 	}
 	protected override fun onPause()
@@ -117,7 +116,5 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	private fun setUpMap()
 	{
 		mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
-		dialog = Dialog()
-		mMap!!.uiSettings.isZoomControlsEnabled = true
 	}
 }
