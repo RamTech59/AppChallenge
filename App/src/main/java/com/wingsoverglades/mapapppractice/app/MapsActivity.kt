@@ -37,7 +37,7 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 		mGoogleApiClient = GoogleApiClient.Builder(this)
 				.addConnectionCallbacks(this as GoogleApiClient.ConnectionCallbacks)
 				.addOnConnectionFailedListener(this as GoogleApiClient.OnConnectionFailedListener)
-				.addApi(Plus.API).addApi(LocationServices.API).build()
+				.addApi(LocationServices.API).addApi(Plus.API).addScope(Scopes.PLUS_LOGIN).addScope(Scopes.PLUS_ME).build()
 	}
 
 	public override fun onConnected(connectionHint: Bundle?)
@@ -116,5 +116,6 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	private fun setUpMap()
 	{
 		mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
+		mMap!!.uiSettings.isZoomControlsEnabled = true
 	}
 }
