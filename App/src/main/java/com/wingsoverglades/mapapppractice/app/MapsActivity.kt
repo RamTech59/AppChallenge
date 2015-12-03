@@ -1,15 +1,14 @@
 package com.wingsoverglades.mapapppractice.app
 
-import android.support.v4.app.FragmentActivity
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 
 class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener
 {
@@ -27,8 +26,10 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 	}
 	override fun onConnectionFailed(connectionResult: ConnectionResult) {
 	}
+
 	override fun onConnectionSuspended(int: Int) {
 	}
+
 	protected fun setupLocationApi()
 	{
 		mGoogleApiClient = GoogleApiClient.Builder(this)
