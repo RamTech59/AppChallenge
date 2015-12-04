@@ -28,10 +28,13 @@ class MapsActivity : FragmentActivity(), GoogleApiClient.ConnectionCallbacks, Go
 		setupApis()
 		setUpMapIfNeeded()
 	}
+
 	override fun onConnectionFailed(connectionResult: ConnectionResult) {
 	}
+
 	override fun onConnectionSuspended(int: Int) {
 	}
+
 	protected fun setupApis()
 	{
 		mGoogleApiClient = GoogleApiClient.Builder(this)
